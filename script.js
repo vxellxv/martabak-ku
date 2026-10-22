@@ -52,6 +52,7 @@ nextId = transactions.reduce(
 // DATA PENGELUARAN
 
 /* DATA PENGELUARAN */
+
 let expenses = [];
 
 try {
@@ -66,28 +67,13 @@ try {
       createdAt: e.createdAt || Date.now()
     }));
   } else {
-    expenses = [
-      {
-        name: 'Belanja bahan baku',
-        category: 'Bahan baku',
-        amount: 220000,
-        date: todayKey(),
-        createdAt: Date.now() - 1000
-      },
-      {
-        name: 'Gas dan operasional',
-        category: 'Operasional',
-        amount: 80000,
-        date: todayKey(),
-        createdAt: Date.now()
-      }
-    ];
-
+    expenses = [];
     saveExpenses();
   }
 } catch (e) {
   expenses = [];
 }
+
 
 function saveExpenses() {
   localStorage.setItem(
