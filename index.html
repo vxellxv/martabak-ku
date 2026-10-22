@@ -1,0 +1,97 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>MartabakKu — Prototipe</title>
+
+  <!-- Ikon aplikasi -->
+  <link rel="icon" type="image/png" href="icon-512.png">
+
+  <!-- Pengaturan agar bisa dipasang sebagai aplikasi -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#f5b82e">
+
+  <!-- Desain aplikasi -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="app">
+
+    <!-- HEADER / RINGKASAN USAHA -->
+    <header class="hero">
+
+      <div class="brand">
+        <div class="logo">♨</div>
+
+        <div>
+          <h1>MartabakKu</h1>
+          <p>Teman usaha, catatan lebih rapi</p>
+        </div>
+      </div>
+
+      <div class="eyebrow">RINGKASAN USAHA</div>
+
+      <div class="hero-total" id="heroSales">
+        Rp789.000
+      </div>
+
+      <div class="hero-stats">
+
+        <div class="hero-stat">
+          <small>Martabak terjual</small>
+          <strong id="heroQty">27 buah</strong>
+        </div>
+
+        <div class="hero-stat">
+          <small>Total Metode Pembayaran</small>
+          <strong id="heroExpense">0 transaksi</strong>
+        </div>
+
+      </div>
+    </header>
+
+    <!-- KONTEN UTAMA -->
+    <main class="content" id="content"></main>
+
+    <!-- NAVIGASI -->
+    <nav class="nav">
+
+      <button class="active" data-tab="home">
+        <span>⌂</span>
+        Beranda
+      </button>
+
+      <button data-tab="sales">
+        <span>＋</span>
+        Penjualan
+      </button>
+
+      <button data-tab="finance">
+        <span>▤</span>
+        Keuangan
+      </button>
+
+      <button data-tab="reports">
+        <span>▥</span>
+        Laporan
+      </button>
+
+      <button data-tab="settings">
+        <span>⚙</span>
+        Pengaturan
+      </button>
+
+    </nav>
+
+    <!-- NOTIFIKASI -->
+    <div class="toast" id="toast" role="status"></div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
