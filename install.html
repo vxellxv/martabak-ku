@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5b82e">
+  <title>Instal MartabakKu</title>
+  <style>
+    :root { color-scheme: light; --gold:#f5b82e; --ink:#2b2418; --muted:#706757; --cream:#fff8e8; --line:#eadfc8; }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; background:var(--cream); color:var(--ink); }
+    main { min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px; }
+    .page { width:min(100%,520px); text-align:center; }
+    .logo { width:108px; height:108px; object-fit:contain; border-radius:26px; background:white; box-shadow:0 8px 24px #4a35151a; }
+    .eyebrow { margin:22px 0 8px; color:#8a6500; font-weight:750; font-size:.82rem; letter-spacing:.12em; text-transform:uppercase; }
+    h1 { font-size:clamp(2rem,8vw,3rem); line-height:1.08; margin:0; letter-spacing:-.04em; }
+    .lead { color:var(--muted); line-height:1.65; margin:14px auto 24px; max-width:390px; }
+    .actions { display:grid; gap:10px; }
+    button,a.button { display:block; width:100%; border:0; border-radius:15px; padding:15px 18px; font:inherit; font-weight:750; text-decoration:none; cursor:pointer; }
+    .primary { background:var(--gold); color:#2b2418; box-shadow:0 5px 0 #d99c12; }
+    .secondary { background:#fff; color:var(--ink); border:1px solid var(--line)!important; }
+    .status { min-height:24px; margin:14px 0 0; font-size:.9rem; color:var(--muted); line-height:1.5; }
+    .steps { margin:24px 0 0; padding:18px; border:1px solid var(--line); border-radius:18px; background:#ffffffa8; text-align:left; }
+    .steps h2 { font-size:1rem; margin:0 0 10px; }
+    .steps ol { margin:0; padding-left:22px; color:var(--muted); line-height:1.65; }
+    .foot { margin:22px 0 0; color:var(--muted); font-size:.8rem; }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="page" aria-labelledby="title">
+      <img class="logo" src="./icon-512.png" alt="Logo MartabakKu" onerror="this.style.display='none'">
+      <p class="eyebrow">Teman usaha, catatan lebih rapi</p>
+      <h1 id="title">MartabakKu</h1>
+      <p class="lead">Catat penjualan dan pengeluaran usaha martabak dengan lebih praktis. Tambahkan MartabakKu ke layar utama agar mudah dibuka kapan saja.</p>
+      <div class="actions">
+        <button class="primary" id="installButton" hidden>Instal MartabakKu</button>
+        <button class="primary" id="iosButton" hidden>Petunjuk instal di iPhone</button>
+        <a class="button secondary" href="./index.html">Buka MartabakKu</a>
+      </div>
+      <p class="status" id="status" aria-live="polite">Memeriksa opsi instalasi yang tersedia…</p>
+      <div class="steps" id="steps" hidden>
+        <h2 id="stepsTitle">Cara menambahkan ke layar utama</h2>
+        <ol id="stepsList"></ol>
+      </div>
+      <p class="foot">MartabakKu · Aplikasi pencatatan usaha</p>
+    </section>
+  </main>
+  <script>
+    const installButton = document.getElementById('installButton');
+    const iosButton = document.getElementById('iosButton');
+    const statusText = document.getElementById('status');
+    const steps = document.getElementById('steps');
+    const stepsTitle = document.getElementById('stepsTitle');
+    const stepsList = document.getElementById('stepsList');
+    let deferredPrompt = null;
+
+    function showSteps(title, items) {
+      stepsTitle.textContent = title;
+      stepsList.replaceChildren(...items.map(text => {
+        const li = document.createElement('li'); li.textContent = text; return li;
+      }));
+      steps.hidden = false;
+    }
+
+    window.addEventListener('beforeinstallprompt', event => {
+      event.preventDefault();
+      deferredPrompt = event;
+      installButton.hidden = false;
+      iosButton.hidden = true;
+      statusText.textContent = 'MartabakKu siap dipasang di perangkat ini.';
+    });
+
+    installButton.addEventListener('click', async () => {
+      if (!deferredPrompt) {
+        statusText.textContent = 'Opsi instal langsung belum tersedia. Gunakan petunjuk di bawah.';
+        showSteps('Cara instal di Android', ['Buka halaman ini lewat Google Chrome.', 'Tekan menu tiga titik di pojok kanan atas.', 'Pilih “Instal aplikasi” atau “Tambahkan ke layar utama”.']);
+        return;
+      }
+      deferredPrompt.prompt();
+      await deferredPrompt.userChoice;
+      deferredPrompt = null;
+      installButton.hidden = true;
+      statusText.textContent = 'Jika instalasi disetujui, ikon MartabakKu akan ditambahkan ke perangkat.';
+    });
+
+    const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.MSStream;
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+    if (isIOS && !isStandalone) {
+      iosButton.hidden = false;
+      statusText.textContent = 'Di iPhone, tambahkan MartabakKu melalui menu Bagikan di Safari.';
+    } else if (isStandalone) {
+      statusText.textContent = 'MartabakKu sudah dibuka dalam mode aplikasi.';
+    } else {
+      statusText.textContent = 'Jika tombol instal belum muncul, gunakan petunjuk instal di bawah.';
+      showSteps('Cara instal di Android', ['Buka halaman ini lewat Google Chrome.', 'Tekan menu tiga titik di pojok kanan atas.', 'Pilih “Instal aplikasi” atau “Tambahkan ke layar utama”.']);
+    }
+
+    iosButton.addEventListener('click', () => {
+      showSteps('Cara instal di iPhone', ['Buka link ini menggunakan Safari.', 'Tekan tombol Bagikan (kotak dengan panah ke atas).', 'Pilih “Tambahkan ke Layar Utama”.', 'Tekan “Tambah” di pojok kanan atas.']);
+      statusText.textContent = 'Ikuti langkah-langkah berikut untuk menambahkan ikon ke layar utama.';
+    });
+  </script>
+</body>
+</html>
