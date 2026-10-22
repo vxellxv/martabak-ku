@@ -1,5 +1,5 @@
 
-const CACHE_NAME = 'martabak-ku-v1';
+const CACHE_NAME = 'martabak-ku-v2';
 
 self.addEventListener('install', event => {
   event.waitUntil(
@@ -7,9 +7,11 @@ self.addEventListener('install', event => {
       cache.addAll([
         './',
         './index.html',
+        './install.html',
         './style.css',
         './script.js',
         './manifest.json',
+        './icon-192.png',
         './icon-512.png'
       ])
     )
@@ -23,7 +25,7 @@ self.addEventListener('activate', event => {
     caches.keys().then(keys =>
       Promise.all(
         keys
-          .filter(key => key !== CACHE_NAME)
+          .filter(key => key.startsWith('martabak-ku-') && key !== CACHE_NAME)
           .map(key => caches.delete(key))
       )
     )
