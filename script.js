@@ -1,6 +1,7 @@
 
 const APP_VERSION = '1.0.0';
 
+
 async function checkAppVersion() {
   try {
     const response = await fetch('./version.json?t=' + Date.now(), {
@@ -10,14 +11,21 @@ async function checkAppVersion() {
     if (!response.ok) return;
 
     const data = await response.json();
+    const latestVersion = data.version;
+    const notifiedVersion = localStorage.getItem('martabakNotifiedVersion');
 
-    if (data.version !== APP_VERSION) {
+    if (
+      latestVersion !== APP_VERSION &&
+      notifiedVersion !== latestVersion
+    ) {
       alert(
         'Ada versi baru MartabakKu!\n\n' +
         data.message +
         '\n\nVersi aplikasi: ' + APP_VERSION +
-        '\nVersi terbaru: ' + data.version
+        '\nVersi terbaru: ' + latestVersion
       );
+
+      localStorage.setItem('martabakNotifiedVersion', latestVersion);
     }
   } catch (error) {
     console.log('Pengecekan versi dilewati.');
