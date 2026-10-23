@@ -1,4 +1,31 @@
 
+const APP_VERSION = '1.0.0';
+
+async function checkAppVersion() {
+  try {
+    const response = await fetch('./version.json?t=' + Date.now(), {
+      cache: 'no-store'
+    });
+
+    if (!response.ok) return;
+
+    const data = await response.json();
+
+    if (data.version !== APP_VERSION) {
+      alert(
+        'Ada versi baru MartabakKu!\n\n' +
+        data.message +
+        '\n\nVersi aplikasi: ' + APP_VERSION +
+        '\nVersi terbaru: ' + data.version
+      );
+    }
+  } catch (error) {
+    console.log('Pengecekan versi dilewati.');
+  }
+}
+
+checkAppVersion();
+
 const fmt = n => 'Rp' + Math.round(n).toLocaleString('id-ID');
 
 let tab = 'home';
@@ -49,8 +76,6 @@ nextId = transactions.reduce(
   (max, t) => Math.max(max, Number(t.id) || 0), 0
 ) + 1;
 
-// DATA PENGELUARAN
-
 /* DATA PENGELUARAN */
 
 let expenses = [];
@@ -73,7 +98,6 @@ try {
 } catch (e) {
   expenses = [];
 }
-
 
 function saveExpenses() {
   localStorage.setItem(
