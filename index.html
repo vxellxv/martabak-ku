@@ -16,6 +16,63 @@
 
   <!-- Desain aplikasi -->
   <link rel="stylesheet" href="style.css">
+
+<style>
+  .chart-line-draw {
+    stroke-dasharray: 2400;
+    stroke-dashoffset: 2400;
+    animation: chartLineGrow 3s cubic-bezier(.2,.75,.25,1) forwards;
+  }
+
+  .chart-area-rise {
+    transform-box: fill-box;
+    transform-origin: center bottom;
+    animation: chartAreaRise 2s ease-out both;
+  }
+
+  .chart-point-appear {
+    opacity: 0;
+    animation: chartDotAppear .3s ease-out 3s forwards;
+  }
+
+  .chart-point,
+  [data-detail-day],
+  [data-revenue-day] {
+    cursor: pointer;
+  }
+
+  @keyframes chartLineGrow {
+    to { stroke-dashoffset: 0; }
+  }
+
+  @keyframes chartAreaRise {
+    from { opacity: 0; }
+    to { opacity: .14; }
+  }
+
+  @keyframes chartDotAppear {
+    to { opacity: 1; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .chart-line-draw,
+    .chart-area-rise,
+    .chart-point-appear {
+      animation: none !important;
+      stroke-dashoffset: 0 !important;
+      opacity: 1 !important;
+    }
+  }
+</style>
+
+<style>
+.chart-line-draw { stroke-dasharray: 2400; stroke-dashoffset: 2400; animation: chartLineGrow 1.15s cubic-bezier(.2,.75,.25,1) forwards; }
+.chart-area-rise { transform-box: fill-box; transform-origin: center bottom; animation: chartAreaRise .9s ease-out both; }
+@keyframes chartLineGrow { to { stroke-dashoffset: 0; } }
+@keyframes chartAreaRise { from { opacity: 0; transform: scaleY(.02); } to { opacity: .14; transform: scaleY(1); } }
+@keyframes chartDotRise { 0% { opacity: 0; transform: translateY(18px) scale(.5); } 70% { opacity: 1; transform: translateY(-2px) scale(1.15); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
+@media (prefers-reduced-motion: reduce) { .chart-line-draw, .chart-area-rise, [style*="chartDotRise"] { animation-duration: .01ms !important; animation-delay: 0ms !important; } }
+</style>
 </head>
 
 <body>
@@ -25,7 +82,7 @@
     <header class="hero">
 
       <div class="brand">
-        <div class="logo">♨</div>
+        <div class="logo"><svg class="ui-icon" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 15c0-2 3.6-3.5 8-3.5s8 1.5 8 3.5-3.6 4-8 4-8-2-8-4Z"/><path d="M6 11c0-2 2.7-3.5 6-3.5s6 1.5 6 3.5"/></svg></div>
 
         <div>
           <h1>MartabakKu</h1>
@@ -61,27 +118,27 @@
     <nav class="nav">
 
       <button class="active" data-tab="home">
-        <span>⌂</span>
+        <span><svg class="ui-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7"/><path d="M5 9v11h14V9"/><path d="M9 20v-6h6v6"/></svg></span>
         Beranda
       </button>
 
       <button data-tab="sales">
-        <span>＋</span>
+        <span><svg class="ui-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
         Penjualan
       </button>
 
       <button data-tab="finance">
-        <span>▤</span>
+        <span><svg class="ui-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="15" rx="2"/><path d="M3 8h18M16 14h2"/></svg></span>
         Keuangan
       </button>
 
       <button data-tab="reports">
-        <span>▥</span>
+        <span><svg class="ui-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 14 4-4 4 3 5-7"/></svg></span>
         Laporan
       </button>
 
       <button data-tab="settings">
-        <span>⚙</span>
+        <span><svg class="ui-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19 13.5a7 7 0 0 0 0-3l2-1.5-2-3.5-2.3 1a7 7 0 0 0-2.5-1.4L14 3h-4l-.3 2.1a7 7 0 0 0-2.5 1.4l-2.3-1-2 3.5L5 10.5a7 7 0 0 0 0 3L3 15l2 3.5 2.3-1a7 7 0 0 0 2.5 1.4L10 21h4l.3-2.1a7 7 0 0 0 2.5-1.4l2.3 1 2-3.5Z"/></svg></span>
         Pengaturan
       </button>
 
@@ -90,11 +147,38 @@
     <!-- NOTIFIKASI -->
     <div class="toast" id="toast" role="status"></div>
 
+    <div id="updateNotice" style="display:none; position:fixed; bottom:20px; left:16px; right:16px; max-width:488px; margin:auto; padding:18px; background:#fff8ef; border:1px solid #e7e9e2; border-radius:16px; box-shadow:0 4px 20px #0002; z-index:9999;">
+      <strong>Versi baru MartabakKu tersedia!</strong>
+      <p id="updateMessage">Ada pembaruan untuk aplikasi MartabakKu.</p>
+      <div style="display:flex; gap:8px;">
+        <button id="updateNow" style="flex:1; padding:10px; border:0; border-radius:8px; background:#8b4513; color:white;">Update sekarang</button>
+        <button id="updateLater" style="flex:1; padding:10px; border:1px solid #ddd; border-radius:8px; background:white;">Nanti</button>
+      </div>
+    </div>
+
   </div>
 
-    <script src="script.js"></script>
+    <!-- Modul halaman dimuat lebih dulu; app.js memuat data, fungsi bersama, navigasi, lalu render awal. -->
+    <script src="beranda.js"></script>
+    <script src="penjualan.js"></script>
+    <script src="keuangan.js"></script>
+    <script src="laporan.js"></script>
+    <script src="pengaturan.js"></script>
+    <script src="app.js"></script>
+
 
   <script>
+    // Efek tekan untuk elemen interaktif, termasuk konten yang dibuat dinamis.
+    document.addEventListener('pointerdown', function (event) {
+      const target = event.target.closest('button, a, [role="button"], input[type="button"], input[type="submit"], [data-action], [onclick], .metric, .totalbox, .dashboard-card, .report-card, .payment-card, .clickable');
+      if (!target || target.matches(':disabled, [aria-disabled="true"]')) return;
+      target.classList.remove('tap-bounce'); void target.offsetWidth; target.classList.add('tap-bounce');
+    });
+    document.addEventListener('animationend', function (event) { if (event.animationName === 'martabakTap') event.target.classList.remove('tap-bounce'); });
+  </script>
+
+  <script>
+    
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('./service-worker.js')

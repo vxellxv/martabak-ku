@@ -8,3 +8,368 @@
   -webkit-appearance: menulist;
   cursor: pointer;
 }
+
+.food-icon {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  flex-shrink: 0;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff3d6;
+  border: 1px solid #f0dfb7;
+  border-radius: 14px;
+  font-size: 21px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.food-icon:has(+ .product-info) {
+  letter-spacing: -5px;
+}
+
+.food-icon.food-mixed {
+  display: block;
+  position: relative;
+  font-size: 15px;
+  letter-spacing: 0;
+}
+
+.food-mixed span {
+  position: absolute;
+  line-height: 1;
+}
+
+.food-mixed span:first-child {
+  top: 7px;
+  left: 5px;
+}
+
+.food-mixed span:last-child {
+  right: 5px;
+  bottom: 7px;
+}
+
+
+/* ===== ANIMASI GLOBAL MARTABAKKU ===== */
+
+/* Transisi dasar */
+button,
+.btn,
+.chip,
+.metric,
+.panel,
+.product,
+.settings-row,
+.food-icon,
+input,
+select,
+textarea {
+  transition:
+    transform .18s ease,
+    box-shadow .22s ease,
+    background-color .2s ease,
+    border-color .2s ease,
+    color .2s ease,
+    opacity .2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Semua tombol saat ditekan */
+button:active,
+.btn:active,
+.chip:active {
+  transform: scale(.96);
+}
+
+/* Tombol utama */
+.btn:hover {
+  box-shadow: 0 4px 10px #8b451320;
+}
+
+/* Kartu ringkasan dan panel */
+.metric,
+.panel {
+  transition:
+    transform .22s ease,
+    box-shadow .22s ease,
+    border-color .22s ease;
+}
+
+@media (hover: hover) {
+  .metric:hover,
+  .panel:hover {
+    box-shadow: 0 5px 16px #2b21180d;
+    border-color: #dfc5aa;
+  }
+}
+
+/* Efek saat kartu ditekan */
+.metric:active {
+  transform: scale(.98);
+}
+
+/* Navigasi bawah */
+.nav button {
+  transition:
+    color .2s ease,
+    transform .18s ease,
+    opacity .2s ease;
+}
+
+.nav button:active {
+  transform: scale(.91);
+}
+
+.nav button span {
+  transition:
+    background-color .2s ease,
+    transform .2s ease;
+}
+
+.nav button.active span {
+  animation: navPop .25s ease;
+}
+
+@keyframes navPop {
+  0%   { transform: scale(.85); }
+  65%  { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+/* Filter kategori */
+.chip:active {
+  opacity: .8;
+}
+
+.chip.active {
+  box-shadow: 0 3px 8px #8b451322;
+}
+
+/* Kolom input saat disentuh */
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px #8b451315;
+}
+
+/* Ikon produk */
+.food-icon,
+.food {
+  transition: transform .2s ease;
+}
+
+@media (hover: hover) {
+  .food-icon:hover,
+  .food:hover {
+    transform: translateY(-2px);
+  }
+}
+
+/* Baris pengaturan */
+.settings-row {
+  border-radius: 10px;
+}
+
+.settings-row:active {
+  background: #fff3e6;
+}
+
+/* Animasi konten saat halaman dirender */
+@keyframes contentEnter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hormati pengaturan pengurangan gerakan */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+
+/* ===== TRANSISI HALAMAN MARTABAKKU ===== */
+
+.content {
+  animation: pageEnter .24s ease both;
+}
+
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Form dan panel yang muncul */
+.field,
+.totalbox,
+.notice,
+.empty {
+  animation: elementEnter .22s ease both;
+}
+
+@keyframes elementEnter {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Efek klik kartu produk */
+.product {
+  border-radius: 10px;
+}
+
+.product:active {
+  background: #fff5e9;
+  transform: scale(.985);
+}
+
+/* Efek saat tombol kembali ditekan */
+button:active {
+  transition-duration: .08s;
+}
+
+/* Animasi toast notifikasi */
+.toast {
+  transition: opacity .2s ease;
+}
+
+/* Aksesibilitas */
+@media (prefers-reduced-motion: reduce) {
+  .content,
+  .field,
+  .totalbox,
+  .notice,
+  .empty {
+    animation: none !important;
+  }
+}
+
+
+/* Animasi perpindahan halaman */
+#content.page-transition {
+  animation: pageTransition .25s ease both;
+}
+
+@keyframes pageTransition {
+  from {
+    opacity: 0;
+    transform: translateY(7px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #content.page-transition {
+    animation: none !important;
+  }
+}
+
+#content.page-enter {
+  animation: pageEnter 0.3s ease-out;
+}
+
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Animasi kartu dan histori penjualan */
+#content.page-enter .metric,
+#content.page-enter .panel,
+#content.page-enter .totalbox,
+#content.page-enter .expense-card,
+#content.page-enter .sale-card,
+#content.page-enter .history-item {
+  animation: cardEnter 0.4s ease-out both;
+}
+
+@keyframes cardEnter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* Ikon outline elegan untuk seluruh aplikasi */
+.ui-icon {
+  display: inline-block;
+  vertical-align: middle;
+  flex: 0 0 auto;
+}
+.metric .emoji {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  margin-bottom: 12px;
+  border-radius: 12px;
+  background: #f7eddf;
+  color: #805b3c;
+  font-size: 0;
+}
+.food .ui-icon,
+.food-icon .ui-icon {
+  color: #805b3c;
+}
+.food-pair {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+}
+.nav button span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 25px;
+}
+.nav button.active span {
+  padding: 4px 12px;
+}
+.expense-datetime .ui-icon {
+  color: #8b6b4d;
+  margin-right: 3px;
+}
+.logo .ui-icon {
+  color: var(--green);
+}
